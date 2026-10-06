@@ -21,6 +21,7 @@ use Flarum\Api\Resource\ForumResource;
 use Flarum\Api\Schema\Attribute;
 use Flarum\Discussion\Discussion;
 use Flarum\Extend;
+use Flarum\Post\CommentPost;
 use Flarum\Post\Post;
 use Flarum\Settings\Event\Deserializing;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -62,10 +63,14 @@ return [
         ->addSearcher(Post::class, SonicPostSearcher::class)
         ->setFulltext(SonicPostSearcher::class, PostFulltextFilter::class),
 
+    // 🚨 Registered on CommentPost, not Post. Core observes the model class
+    // each indexer is keyed by, and Eloquent fires a reply's events as
+    // "eloquent.created: Flarum\Post\CommentPost" — keyed on Post, no reply,
+    // edit, hide or delete would ever reach the index.
     (new Extend\SearchIndex())
         ->indexer(Discussion::class, DiscussionIndexer::class)
-        ->indexer(Post::class, PostReindexer::class)
-        ->indexer(Post::class, PostIndexer::class)
+        ->indexer(CommentPost::class, PostReindexer::class)
+        ->indexer(CommentPost::class, PostIndexer::class)
         ->indexer(User::class, UserIndexer::class),
 
     new Extend\ServiceProvider(SearchProvider::class),
