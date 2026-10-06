@@ -74,7 +74,10 @@ return [
         ->indexer(CommentPost::class, PostIndexer::class)
         ->indexer(User::class, UserIndexer::class),
 
-    new Extend\ServiceProvider(SearchProvider::class),
+    // 🚨 register(), not the constructor: Extend\ServiceProvider ignores a
+    // constructor argument, and the provider silently never loaded.
+    (new Extend\ServiceProvider())
+        ->register(SearchProvider::class),
 
     (new Extend\Event())
         ->listen(Deserializing::class, WriteOnlyPassword::class.'@hide')
