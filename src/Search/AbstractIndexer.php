@@ -67,7 +67,10 @@ abstract class AbstractIndexer implements IndexerInterface
         $this->safely(function (Channel $channel) use ($models) {
             $texts = $this->textFor($models);
             foreach ($models as $model) {
-                $channel->result($this->command('FLUSHO', $model->id));
+                // A model created in this request has no object to flush yet.
+                if (! $model->wasRecentlyCreated) {
+                    $channel->result($this->command('FLUSHO', $model->id));
+                }
                 $this->pushText($channel, $model->id, $texts[$model->id] ?? '');
             }
         });
