@@ -2,6 +2,7 @@
 
 namespace Ernestdefoe\Sonic;
 
+use Flarum\Foundation\Config;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Psr\Log\LoggerInterface;
@@ -30,6 +31,7 @@ class Sonic
 
     public function __construct(
         protected SettingsRepositoryInterface $settings,
+        protected Config $config,
         protected Cache $cache,
         protected LoggerInterface $log
     ) {
@@ -48,13 +50,14 @@ class Sonic
     /**
      * One bucket per forum, so several forums can share one Sonic: a rebuild
      * flushes this bucket only, never the whole collection. Defaults to the
-     * forum's host name.
+     * forum's host name (from config.php: Flarum 2 has no forum_url setting,
+     * and reading one silently gave every forum the same bucket).
      */
     public function bucket(): string
     {
-        $bucket = (string) $this->settings->get(self::KEY.'.bucket', '');
-        if (trim($bucket) === '') {
-            $bucket = (string) (parse_url((string) $this->settings->get('forum_url', ''), PHP_URL_HOST) ?: 'flarum');
+        $bucket = trim((string) $this->settings->get(self::KEY.'.bucket', ''));
+        if ($bucket === '') {
+            $bucket = $this->config->url()->getHost();
         }
 
         return self::name($bucket);
