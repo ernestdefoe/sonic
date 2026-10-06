@@ -1,0 +1,42 @@
+{
+    "name": "ernestdefoe/sonic",
+    "description": "A light search driver for Flarum 2, backed by Sonic, the tiny Rust search backend. Free and MIT.",
+    "keywords": ["flarum", "search", "sonic", "fulltext", "lightweight"],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ernest Defoe",
+            "email": "ernestdefoe@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ernestdefoe/sonic/issues",
+        "source": "https://github.com/ernestdefoe/sonic"
+    },
+    "require": {
+        "php": "^8.2",
+        "flarum/core": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ernestdefoe\\Sonic\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Sonic Search",
+            "category": "feature",
+            "icon": {
+                "name": "fas fa-feather-pointed",
+                "backgroundColor": "#3b5bdb",
+                "color": "#fff"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
