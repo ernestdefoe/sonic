@@ -35,9 +35,11 @@ export default class SonicControls extends Component<Attrs> {
     const password = setting(`${K}.password`, '');
     const saved = !!app.data.settings[`${K}.password_set`];
 
-    return m('div', [
+    // .Form-body takes the settings form's own 24px gap between groups.
+    return m('.Form-body', [
       m('.Form-group', [
         m('label', t('password_label')),
+        m('.helpText', t('password_help')),
         m('input.FormControl', {
           type: 'password',
           autocomplete: 'new-password',
@@ -45,7 +47,6 @@ export default class SonicControls extends Component<Attrs> {
           placeholder: saved ? t('password_saved') : '',
           oninput: (e: InputEvent) => password((e.target as HTMLInputElement).value),
         }),
-        m('.helpText', t('password_help')),
       ]),
 
       m('.Form-group', [
