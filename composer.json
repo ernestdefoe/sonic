@@ -11,6 +11,7 @@
         }
     ],
     "support": {
+        "forum": "https://discuss.flarum.org/d/40008-sonic-search-for-flarum-2-that-fits-on-the-smallest-server",
         "issues": "https://github.com/ernestdefoe/sonic/issues",
         "source": "https://github.com/ernestdefoe/sonic"
     },
