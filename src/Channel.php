@@ -137,10 +137,14 @@ final class Channel
         return $this->read();
     }
 
+    /**
+     * Just hangs up. Sonic treats end-of-stream as a clean close; sending
+     * QUIT and not waiting for its "ENDED quit" made Sonic write to a closed
+     * socket and panic a thread on every connection.
+     */
     public function close(): void
     {
         if (is_resource($this->socket)) {
-            @fwrite($this->socket, "QUIT\n");
             fclose($this->socket);
         }
     }
