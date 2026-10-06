@@ -94,6 +94,12 @@ composer require ernestdefoe/sonic:^0.1
 php flarum cache:clear
 ```
 
+## Support
+
+- **Support forum:** [Sonic Search on ernestdefoe.online](https://ernestdefoe.online/d/126)
+- **Flarum community:** [Sonic Search on discuss.flarum.org](https://discuss.flarum.org/d/40008-sonic-search-for-flarum-2-that-fits-on-the-smallest-server)
+- **Bug reports:** [GitHub issues](https://github.com/ernestdefoe/sonic/issues)
+
 ## Licence
 
 [MIT](./LICENSE.md) © Ernest Defoe
