@@ -22,7 +22,7 @@ judged on that first.
 - **Search never leaks.** Sonic only returns ids; Flarum loads them through the
   searcher's `whereVisibleTo` query. Never load search hits any other way.
 - **The password never leaves the server.** Not in forum attributes, not in
-  the admin payload (`Listener/HidePassword`), not in error messages.
+  the admin payload (`Listener/WriteOnlyPassword`), not in error messages.
 - **All strings translatable** (`locale/en.yml`), zero hardcoded English in UI.
 - **Conventional commit subjects** (`feat:` / `fix:` / `docs:` / `chore:`):
   `.github/workflows/draft-release.yml` picks the version bump from the SUBJECT.

@@ -30,7 +30,7 @@ export default class SonicControls extends Component<Attrs> {
 
   view() {
     const setting = this.attrs.setting;
-    // The saved password never reaches the browser (see HidePassword); the
+    // The saved password never reaches the browser (see WriteOnlyPassword); the
     // field only ever writes a new one.
     const password = setting(`${K}.password`, '');
     const saved = !!app.data.settings[`${K}.password_set`];

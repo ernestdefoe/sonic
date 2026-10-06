@@ -3,7 +3,7 @@
 use Ernestdefoe\Sonic\Api\Controller\RebuildController;
 use Ernestdefoe\Sonic\Api\Controller\StatusController;
 use Ernestdefoe\Sonic\Console\IndexCommand;
-use Ernestdefoe\Sonic\Listener\HidePassword;
+use Ernestdefoe\Sonic\Listener\WriteOnlyPassword;
 use Ernestdefoe\Sonic\Provider\SearchProvider;
 use Ernestdefoe\Sonic\Search\Discussion\DiscussionIndexer;
 use Ernestdefoe\Sonic\Search\Discussion\FulltextFilter as DiscussionFulltextFilter;
@@ -24,6 +24,7 @@ use Flarum\Extend;
 use Flarum\Post\CommentPost;
 use Flarum\Post\Post;
 use Flarum\Settings\Event\Deserializing;
+use Flarum\Settings\Event\Saving;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 
@@ -76,7 +77,8 @@ return [
     new Extend\ServiceProvider(SearchProvider::class),
 
     (new Extend\Event())
-        ->listen(Deserializing::class, HidePassword::class),
+        ->listen(Deserializing::class, WriteOnlyPassword::class.'@hide')
+        ->listen(Saving::class, WriteOnlyPassword::class.'@keep'),
 
     (new Extend\Console())
         ->command(IndexCommand::class),

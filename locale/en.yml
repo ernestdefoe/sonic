@@ -9,7 +9,7 @@ ernestdefoe-sonic:
     bucket_label: Bucket
     bucket_help: >
       Optional. Keeps this forum's index apart when several forums share one Sonic.
-      Leave blank to use your forum's host name.
+      Leave blank to use your forum's host name. Rebuild the index after changing it.
     password_label: Password
     password_help: Sonic's channel.auth_password. Stored on the server and never sent back to the browser.
     password_saved: A password is saved. Type a new one to replace it.
