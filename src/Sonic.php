@@ -105,6 +105,7 @@ class Sonic
             $work($channel);
         } catch (SonicException $e) {
             $this->fail($e, 'ingest');
+
             throw $e;
         } finally {
             $channel?->close();

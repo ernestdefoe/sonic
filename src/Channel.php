@@ -48,6 +48,7 @@ final class Channel
 
         if (! str_starts_with($channel->read(), 'CONNECTED')) {
             $channel->close();
+
             throw new SonicException('protocol');
         }
 
@@ -55,6 +56,7 @@ final class Channel
 
         if (! str_starts_with($started, 'STARTED')) {
             $channel->close();
+
             throw new SonicException(str_contains($started, 'authentication') ? 'auth_failed' : 'protocol');
         }
 
