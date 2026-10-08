@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * One object per visible comment, for post search. Only comments carry text;
  * event posts (renamed, stickied, …) are never sent.
+ *
+ * @extends AbstractIndexer<Post>
  */
 class PostIndexer extends AbstractIndexer
 {
@@ -26,7 +28,7 @@ class PostIndexer extends AbstractIndexer
 
     public function save(array $models): void
     {
-        parent::save(array_filter($models, fn (Post $p) => $p->type === 'comment'));
+        parent::save(array_filter($models, fn ($p) => $p instanceof Post && $p->type === 'comment'));
     }
 
     protected function textFor(array $models): array

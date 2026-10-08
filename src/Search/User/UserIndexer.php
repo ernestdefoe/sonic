@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Builder;
  * One object per user: username and display name. Indexed with LANG(none) so
  * a name is never mistaken for a stop word. Visibility is applied at query
  * time by the searcher.
+ *
+ * @extends AbstractIndexer<User>
  */
 class UserIndexer extends AbstractIndexer
 {

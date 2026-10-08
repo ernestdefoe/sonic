@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * One object per visible discussion: its title, then the text of its visible
  * comments in order, up to MAX_TEXT.
+ *
+ * @extends AbstractIndexer<Discussion>
  */
 class DiscussionIndexer extends AbstractIndexer
 {

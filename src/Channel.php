@@ -23,6 +23,7 @@ final class Channel
      */
     private int $buffer = 20000;
 
+    /** @param resource $socket */
     private function __construct($socket)
     {
         $this->socket = $socket;

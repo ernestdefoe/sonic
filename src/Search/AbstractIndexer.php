@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Builder;
  * time, a discussion's reply counter. On the sync queue those run inside the
  * visitor's request, so save() first drops models whose indexed text did not
  * change and only opens a connection when something is left.
+ *
+ * @template TModel of AbstractModel
  */
 abstract class AbstractIndexer implements IndexerInterface
 {
@@ -40,10 +42,11 @@ abstract class AbstractIndexer implements IndexerInterface
     ) {
     }
 
+    /** @return Builder<TModel> */
     abstract protected function baseQuery(): Builder;
 
     /**
-     * @param AbstractModel[] $models
+     * @param array<TModel> $models
      * @return array<int, string> id => text, only for models that belong in the index
      */
     abstract protected function textFor(array $models): array;
@@ -68,10 +71,11 @@ abstract class AbstractIndexer implements IndexerInterface
             $texts = $this->textFor($models);
             foreach ($models as $model) {
                 // A model created in this request has no object to flush yet.
+                $id = (int) $model->getKey();
                 if (! $model->wasRecentlyCreated) {
-                    $channel->result($this->command('FLUSHO', $model->id));
+                    $channel->result($this->command('FLUSHO', $id));
                 }
-                $this->pushText($channel, $model->id, $texts[$model->id] ?? '');
+                $this->pushText($channel, $id, $texts[$id] ?? '');
             }
         });
     }
@@ -84,7 +88,7 @@ abstract class AbstractIndexer implements IndexerInterface
 
         $this->safely(function (Channel $channel) use ($models) {
             foreach ($models as $model) {
-                $channel->result($this->command('FLUSHO', $model->id));
+                $channel->result($this->command('FLUSHO', (int) $model->getKey()));
             }
         });
     }
@@ -113,7 +117,9 @@ abstract class AbstractIndexer implements IndexerInterface
     public function flush(): void
     {
         if ($this->sonic->configured()) {
-            $this->sonic->ingest(fn (Channel $channel) => $channel->result($this->command('FLUSHB')));
+            $this->sonic->ingest(function (Channel $channel): void {
+                $channel->result($this->command('FLUSHB'));
+            });
         }
     }
 
