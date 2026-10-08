@@ -4,7 +4,7 @@ import Button from 'flarum/common/components/Button';
 import Switch from 'flarum/common/components/Switch';
 
 const K = 'ernestdefoe-sonic';
-const t = (k: string, p?: Record<string, unknown>) => app.translator.trans(`${K}.admin.${k}`, p);
+const t = (k: string, p: Record<string, unknown> = {}) => app.translator.trans(`${K}.admin.${k}`, p);
 
 // Core keeps each resource's driver under `search_driver_<ModelClass>`.
 const DRIVERS: [string, string][] = [
