@@ -54,11 +54,7 @@ export default class SonicControls extends Component<Attrs> {
         m('.helpText', t('drivers_help')),
         DRIVERS.map(([model, name]) => {
           const driver = setting(`search_driver_${model}`, 'default');
-          return m(
-            Switch,
-            { state: driver() === 'sonic', onchange: (on: boolean) => driver(on ? 'sonic' : 'default') },
-            t(`use_for_${name}`)
-          );
+          return m(Switch, { state: driver() === 'sonic', onchange: (on: boolean) => driver(on ? 'sonic' : 'default') }, t(`use_for_${name}`));
         }),
       ]),
 
@@ -90,7 +86,10 @@ export default class SonicControls extends Component<Attrs> {
     this.checking = true;
     app
       .request<Status>({ method: 'GET', url: this.url('status') })
-      .then((s) => (this.status = s), () => (this.status = { ok: false }))
+      .then(
+        (s) => (this.status = s),
+        () => (this.status = { ok: false })
+      )
       .finally(() => {
         this.checking = false;
         m.redraw();
