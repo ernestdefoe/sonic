@@ -190,4 +190,26 @@ class SonicTest extends TestCase
         $this->assertSame(201, $status, 'The server is down; posting still works');
         $this->assertGreaterThanOrEqual(2, $sonic->ingests, 'The post index and its discussion\'s object were both asked for');
     }
+
+    #[Test]
+    public function an_unreachable_server_falls_back_to_the_database_and_never_blocks_a_post()
+    {
+        // The real client, pointed at a port nothing listens on.
+        $this->setting('ernestdefoe-sonic.host', '127.0.0.1');
+        $this->setting('ernestdefoe-sonic.port', '1');
+        $this->setting('search_driver_'.Discussion::class, 'sonic');
+
+        [$status, $body] = $this->json('POST', '/api/posts', 2, ['json' => ['data' => [
+            'type' => 'posts',
+            'attributes' => ['content' => 'A reply while the index is away'],
+            'relationships' => ['discussion' => ['data' => ['type' => 'discussions', 'id' => '1']]],
+        ]]]);
+        $this->assertSame(201, $status, json_encode($body));
+
+        if (in_array($this->database()->getDriverName(), ['mysql', 'mariadb'], true)) {
+            $this->markTestSkipped('InnoDB FULLTEXT cannot see uncommitted fixtures.');
+        }
+
+        $this->assertEqualsCanonicalizing(['1', '3'], $this->search('lighthouse'));
+    }
 }
